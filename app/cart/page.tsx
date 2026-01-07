@@ -123,7 +123,7 @@ const Page = () => {
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-2xl font-bold text-[#433A3F]">
+                                            <p className="text-lg font-semibold text-[#433A3F]">
                                                 KES {(item.price * KES_EXCHANGE_RATE).toLocaleString()}
                                             </p>
                                         </div>
@@ -133,7 +133,7 @@ const Page = () => {
                                             <div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
+                                                    className="w-10 h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
                                                 >
                                                     −
                                                 </button>
@@ -142,7 +142,7 @@ const Page = () => {
                                                 </span>
                                                 <button
                                                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
+                                                    className="w-10 h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
                                                 >
                                                     +
                                                 </button>

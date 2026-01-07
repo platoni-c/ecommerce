@@ -321,7 +321,7 @@ const Page = () => {
                         </div>
 
                         {/* Tips Section */}
-                        <div className="bg-blue-50 rounded-sm p-6 border border-blue-100">
+                        <div className=" rounded-sm p-6 border border-blue-100">
                             <h3 className="text-lg font-semibold text-[#433A3F] mb-3 flex items-center gap-2">
                                 <span className="text-2xl">💡</span>
                                 Customization Tips

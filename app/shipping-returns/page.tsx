@@ -31,7 +31,7 @@ const Page = () => {
                         Order Tracking
                     </h2>
                     <p className="mb-4">
-                        Once your order is shipped, you will receive a tracking number via email. Use this number to track your package directly on the courier's website.
+                        Once your order is shipped, you will receive a tracking number via email. Use this number to track your package directly on the courier&#39;s website.
                     </p>
                 </div>
 

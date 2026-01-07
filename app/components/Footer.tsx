@@ -6,7 +6,7 @@ const Footer = () => {
             <div className="max-w-6xl mx-auto px-4 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
 
                 <div>
-                    <h3 className="text-neutral-900 text-lg font-semibold mb-4 font-stretch-extra-expanded ">
+                    <h3 className="text-neutral-900 text-lg font-semibold mb-4 font-stretch-extra-expanded uppercase tracking-widest">
                         Samuel&#39;s
                     </h3>
                     <p className="text-sm text-neutral-500">

@@ -16,9 +16,9 @@ const NavBar = () => {
     ];
 
     return (
-        <nav className="relative z-50">
+        <nav className="relative z-10">
             <div className="flex items-center justify-between w-full py-6">
-                <Link href="/" className="text-2xl font-bold text-[#433A3F] transition font-stretch-extra-expanded leading-2">
+                <Link href="/" className="text-2xl font-bold text-[#433A3F] transition font-stretch-extra-expanded leading-2 uppercase tracking-widest">
                     Samuel&#39;s
                 </Link>
 
@@ -83,7 +83,7 @@ const NavBar = () => {
                     </div>
                 </div>
             )}
-            <hr className="border-gray-200" />
+            <hr className="border-gray-200 mb-10" />
         </nav>
     );
 };

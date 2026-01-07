@@ -55,7 +55,7 @@ const Footer = () => {
             <div className="border-t border-neutral-200">
                 <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between text-sm text-neutral-500">
                     <p>
-                        © {new Date().getFullYear()} Kaff&Kaph. All rights reserved.
+                        © {new Date().getFullYear()} <span className="font-semibold uppercase tracking-wide"> Samuel&#39;s</span>. All rights reserved.
                     </p>
                     <p className="mt-2 md:mt-0">
                         Made with care.

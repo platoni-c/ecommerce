@@ -23,7 +23,6 @@ const Hero = () => {
                     alt="Clothing Outline"
                     width={500}
                     height={500}
-                    className="w-2/3 md:w-full max-w-[400px] md:max-w-none h-auto"
                     priority
                 />
             </aside>

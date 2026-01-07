@@ -53,8 +53,8 @@ const Page = async ({ params }: PageProps) => {
     });
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6 font-stretch-expanded">{config.title}</h1>
+        <div className="p-4 sm:p-6">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-6 font-stretch-expanded">{config.title}</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map(({ id, name, imageUrl, price, inStock }) => (
                     <Link href={`/shop/${category}/${id}`} key={id}>

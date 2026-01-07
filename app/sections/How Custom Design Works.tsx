@@ -1,8 +1,8 @@
 const HowCustomDesignWorks = () => {
     return (
-        <section className="max-w-6xl mx-auto px-4 py-16">
-            <header className="text-center mb-12">
-                <h1 className="text-3xl md:text-4xl font-semibold mb-4">
+        <section className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+            <header className="text-center mb-10 sm:mb-12">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">
                     How Custom Designs Work
                 </h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">

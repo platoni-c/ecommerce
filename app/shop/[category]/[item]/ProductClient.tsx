@@ -11,7 +11,7 @@ type ProductClientProps = {
     category: CategoryKey;
 };
 
-const ProductClient = ({ product, category }: ProductClientProps) => {
+const ProductClient = ({ product}: ProductClientProps) => {
     const { addToCart } = useCart();
 
     const [selectedSize, setSelectedSize] = useState<string>("");
@@ -44,10 +44,10 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:py-10">
             {/* Success Toast */}
             {showSuccess && (
-                <div className="fixed top-24 right-8 bg-green-600 text-white px-6 py-4 rounded-sm shadow-none z-50 animate-slide-in-right flex items-center gap-3">
+                <div className="fixed top-4 sm:top-24 right-4 sm:right-8 left-4 sm:left-auto bg-green-600 text-white px-6 py-4 rounded-sm shadow-lg z-50 animate-slide-in-right flex items-center gap-3">
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -55,23 +55,23 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
                 <div className="relative w-full aspect-square bg-gray-100 rounded-sm overflow-hidden">
                     <Image
                         src={product.imageUrl}
                         alt={product.name}
                         fill
-                        className="object-contain p-8"
+                        className="object-contain p-4 sm:p-8"
                         priority
                     />
                 </div>
 
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-4 sm:gap-6">
                     <div>
-                        <h1 className="text-4xl font-bold mb-3 text-[#433A3F]">
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-2 sm:mb-3 text-[#433A3F]">
                             {product.name}
                         </h1>
-                        <p className="text-3xl font-bold text-[#433A3F]">
+                        <p className="text-2xl sm:text-3xl font-bold text-[#433A3F]">
                             KES {(product.price * 130).toLocaleString()}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
@@ -79,7 +79,7 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
                                 {[...Array(5)].map((_, i) => (
                                     <svg
                                         key={i}
-                                        className={`w-5 h-5 ${i < Math.floor(product.rating) ? "text-yellow-400" : "text-gray-300"}`}
+                                        className={`w-4 h-4 sm:w-5 sm:h-5 ${i < Math.floor(product.rating) ? "text-yellow-400" : "text-gray-300"}`}
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -91,18 +91,18 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
                         </div>
                     </div>
 
-                    <p className="text-gray-700 leading-relaxed text-lg">
+                    <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
                         {product.description}
                     </p>
 
                     <div>
                         <h3 className="font-semibold mb-3 text-lg text-[#433A3F]">Select Size</h3>
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex gap-2 sm:gap-3 flex-wrap">
                             {product.sizes.map(size => (
                                 <button
                                     key={size}
                                     onClick={() => setSelectedSize(size)}
-                                    className={`px-6 py-3 border-2 rounded-lg font-medium transition-all ${selectedSize === size
+                                    className={`min-w-12.5 sm:min-w-16 px-4 sm:px-6 py-2 sm:py-3 border-2 rounded-lg font-medium transition-all ${selectedSize === size
                                         ? "border-[#433A3F] bg-[#433A3F] text-white"
                                         : "border-gray-300 hover:border-[#433A3F]"
                                         }`}
@@ -120,7 +120,7 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
                                 <button
                                     key={color}
                                     onClick={() => setSelectedColor(color)}
-                                    className={`px-4 py-2 border-2 rounded-lg capitalize transition-all ${selectedColor === color
+                                    className={`px-3 sm:px-4 py-1.5 sm:py-2 border-2 rounded-lg capitalize transition-all text-sm sm:text-base ${selectedColor === color
                                         ? "border-[#433A3F] bg-gray-50 ring-2 ring-[#433A3F] ring-offset-2"
                                         : "border-gray-300 hover:border-[#433A3F]"
                                         }`}
@@ -140,31 +140,31 @@ const ProductClient = ({ product, category }: ProductClientProps) => {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                className="w-12 h-12 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-xl"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-xl"
                             >
                                 −
                             </button>
-                            <span className="w-16 text-center font-semibold text-xl">{quantity}</span>
+                            <span className="w-12 sm:w-16 text-center font-semibold text-xl">{quantity}</span>
                             <button
                                 onClick={() => setQuantity(quantity + 1)}
-                                className="w-12 h-12 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-xl"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-xl"
                             >
                                 +
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex gap-4 mt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
                         <button
                             onClick={handleAddToCart}
-                            className={`flex-1 btn primary-btn transition shadow-lg ${product.inStock ? "hover:opacity-90" : "cursor-not-allowed opacity-50"}`}
+                            className={`w-full sm:flex-1 py-4 btn primary-btn transition shadow-lg ${product.inStock ? "hover:opacity-90" : "cursor-not-allowed opacity-50"}`}
                             disabled={!product.inStock}
                         >
                             {product.inStock ? "Add to Cart" : "Unavailable"}
                         </button>
                         <Link
                             href={`/custom?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.imageUrl)}`}
-                            className="flex-1 btn secondary-btn hover:bg-gray-50 transition text-center"
+                            className="w-full sm:flex-1 py-4 btn secondary-btn hover:bg-gray-50 transition text-center"
                         >
                             Customize
                         </Link>

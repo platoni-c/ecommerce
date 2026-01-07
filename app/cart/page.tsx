@@ -4,11 +4,9 @@ import { useState } from "react";
 import { useCart } from "@/app/context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
-    const router = useRouter();
     const [showClearConfirm, setShowClearConfirm] = useState(false);
 
     const KES_EXCHANGE_RATE = 130;
@@ -66,21 +64,21 @@ const Page = () => {
     }
 
     return (
-        <div className="min-h-screen py-12 px-4">
+        <div className="min-h-screen py-8 sm:py-12 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                     <div>
-                        <h1 className="text-5xl font-bold text-[#433A3F] mb-2 tracking-tight">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#433A3F] mb-2 tracking-tight">
                             Shopping Cart
                         </h1>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-base sm:text-lg text-gray-600">
                             {cartCount} {cartCount === 1 ? "item" : "items"} in your cart
                         </p>
                     </div>
                     <button
                         onClick={() => setShowClearConfirm(true)}
-                        className="text-red-600 hover:text-red-700 font-medium transition"
+                        className="text-red-600 hover:text-red-700 font-medium transition text-sm sm:text-base"
                     >
                         Clear Cart
                     </button>
@@ -94,9 +92,9 @@ const Page = () => {
                                 key={item.id}
                                 className="bg-white rounded-sm p-6 border border-gray-100 transition-colors"
                             >
-                                <div className="flex gap-6">
+                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                                     {/* Product Image */}
-                                    <div className="relative w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                    <div className="relative w-full sm:w-32 h-48 sm:h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0">
                                         <Image
                                             src={item.imageUrl}
                                             alt={item.name}
@@ -108,10 +106,10 @@ const Page = () => {
                                     {/* Product Details */}
                                     <div className="flex-1 flex flex-col justify-between">
                                         <div>
-                                            <h3 className="text-xl font-semibold text-[#433A3F] mb-2">
+                                            <h3 className="text-lg sm:text-xl font-semibold text-[#433A3F] mb-1 sm:mb-2">
                                                 {item.name}
                                             </h3>
-                                            <div className="flex gap-4 text-sm text-gray-600 mb-3">
+                                            <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
                                                 {item.size && (
                                                     <span className="bg-gray-100 px-3 py-1 rounded-full">
                                                         Size: {item.size}
@@ -123,26 +121,26 @@ const Page = () => {
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-lg font-semibold text-[#433A3F]">
+                                            <p className="text-base sm:text-lg font-semibold text-[#433A3F]">
                                                 KES {(item.price * KES_EXCHANGE_RATE).toLocaleString()}
                                             </p>
                                         </div>
 
                                         {/* Quantity Controls */}
-                                        <div className="flex items-center justify-between mt-4">
+                                        <div className="flex flex-wrap items-center justify-between mt-4 gap-4">
                                             <div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="w-10 h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
+                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
                                                 >
                                                     −
                                                 </button>
-                                                <span className="w-12 text-center font-semibold text-lg">
+                                                <span className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
                                                     {item.quantity}
                                                 </span>
                                                 <button
                                                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="w-10 h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
+                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
                                                 >
                                                     +
                                                 </button>
@@ -150,10 +148,10 @@ const Page = () => {
 
                                             <button
                                                 onClick={() => removeFromCart(item.id)}
-                                                className="text-red-600 hover:text-red-700 font-medium transition flex items-center gap-2"
+                                                className="text-red-600 hover:text-red-700 font-medium transition flex items-center gap-2 text-sm sm:text-base"
                                             >
                                                 <svg
-                                                    className="w-5 h-5"
+                                                    className="w-4 h-4 sm:w-5 sm:h-5"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"

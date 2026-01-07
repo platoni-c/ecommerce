@@ -89,24 +89,24 @@ const CustomizationContent = () => {
     };
 
     return (
-        <div className="min-h-screen py-12 px-4">
+        <div className="min-h-screen py-6 sm:py-12 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold text-[#433A3F] mb-4 tracking-tight">
+                <div className="text-center mb-8 sm:mb-12">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#433A3F] mb-3 sm:mb-4 tracking-tight">
                         Customize Your Product
                     </h1>
-                    <p className="text-lg text-gray-600">
+                    <p className="text-base sm:text-lg text-gray-600">
                         Make it uniquely yours with custom text and design
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
                     {/* Preview Section */}
                     <div className="space-y-6">
-                        <div className="bg-white rounded-sm p-8 border border-gray-100">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-semibold text-[#433A3F]">
+                        <div className="bg-white rounded-sm p-4 sm:p-8 border border-gray-100">
+                            <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                <h2 className="text-xl sm:text-2xl font-semibold text-[#433A3F]">
                                     Live Preview
                                 </h2>
                                 <button
@@ -178,8 +178,8 @@ const CustomizationContent = () => {
 
                     {/* Customization Options */}
                     <div className="space-y-6">
-                        <div className="bg-white rounded-sm p-8 border border-gray-100">
-                            <h2 className="text-2xl font-semibold text-[#433A3F] mb-6">
+                        <div className="bg-white rounded-sm p-6 sm:p-8 border border-gray-100">
+                            <h2 className="text-xl sm:text-2xl font-semibold text-[#433A3F] mb-6">
                                 Customization Options
                             </h2>
 

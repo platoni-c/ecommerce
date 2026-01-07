@@ -13,7 +13,7 @@ const raleway = Raleway({
 });
 
 export const metadata: Metadata = {
-  title: "E-Commerce",
+  title: "Samuel's",
   description: "Online Shopping Store",
 };
 

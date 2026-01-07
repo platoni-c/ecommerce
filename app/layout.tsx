@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { CartProvider } from "@/app/context/CartContext";
+import Notice from "@/app/components/Notice";
 
 
 const raleway = Raleway({
@@ -24,11 +25,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${raleway.variable} antialiased mx-30`}>
+      <body className={`${raleway.variable} antialiased`}>
         <CartProvider>
-          <NavBar />
-          {children}
-          <Footer />
+          {/* Full-width sticky notice at the very top */}
+          <Notice />
+
+          {/* Constrained site content */}
+          <div className="max-w-7xl mx-auto">
+            <NavBar />
+            {children}
+            <Footer />
+          </div>
         </CartProvider>
       </body>
     </html>

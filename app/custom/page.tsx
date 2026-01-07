@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
@@ -34,7 +34,7 @@ const COLOR_OPTIONS = [
     { name: "Pink", value: "#EC4899" },
 ];
 
-const Page = () => {
+const CustomizationContent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { addToCart } = useCart();
@@ -351,5 +351,18 @@ const Page = () => {
         </div>
     );
 };
+
+const Page = () => (
+    <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#433A3F] mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading customization studio...</p>
+            </div>
+        </div>
+    }>
+        <CustomizationContent />
+    </Suspense>
+);
 
 export default Page;

@@ -141,7 +141,7 @@ const Page = () => {
 
                     {/* Content */}
                     <div className="lg:col-span-3">
-                        <div className="bg-white rounded-sm p-8 border border-gray-100 min-h-[500px]">
+                        <div className="bg-white rounded-sm p-8 border border-gray-100 min-h-125">
                             {/* Profile Section */}
                             {activeSection === "profile" && (
                                 <div>
@@ -311,7 +311,7 @@ const Page = () => {
 
                                     <div className="space-y-6">
                                         {/* Password Change */}
-                                        <div className="border border-gray-200 rounded-sm p-6">
+                                        <div>
                                             <h3 className="text-xl font-semibold text-[#433A3F] mb-4">
                                                 Change Password
                                             </h3>
@@ -350,22 +350,22 @@ const Page = () => {
                                         </div>
 
                                         {/* Notifications */}
-                                        <div className="border border-gray-200 rounded-sm p-6">
+                                        <div className="border border-gray-200 rounded-sm py-4 px-3">
                                             <h3 className="text-xl font-semibold text-[#433A3F] mb-4">
                                                 Notification Preferences
                                             </h3>
                                             <div className="space-y-3">
                                                 <label className="flex items-center gap-3 cursor-pointer">
                                                     <input type="checkbox" defaultChecked className="w-5 h-5 rounded" />
-                                                    <span className="text-gray-700">Email notifications for orders</span>
+                                                    <span className="black">Email notifications for orders</span>
                                                 </label>
                                                 <label className="flex items-center gap-3 cursor-pointer">
                                                     <input type="checkbox" defaultChecked className="w-5 h-5 rounded" />
-                                                    <span className="text-gray-700">Promotional emails</span>
+                                                    <span className="black">Promotional emails</span>
                                                 </label>
                                                 <label className="flex items-center gap-3 cursor-pointer">
                                                     <input type="checkbox" className="w-5 h-5 rounded" />
-                                                    <span className="text-gray-700">SMS notifications</span>
+                                                    <span className="black">SMS notifications</span>
                                                 </label>
                                             </div>
                                         </div>

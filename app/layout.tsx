@@ -31,7 +31,7 @@ export default function RootLayout({
           <Notice />
 
           {/* Constrained site content */}
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto sm:px-10 px-6">
             <NavBar />
             {children}
             <Footer />

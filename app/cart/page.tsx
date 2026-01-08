@@ -52,7 +52,7 @@ const Page = () => {
                             Looks like you haven&#39;t added anything to your cart yet.
                         </p>
                         <Link
-                            href="/shop/hoodies"
+                            href="/shop"
                             className="inline-block btn primary-btn hover:opacity-90 transition shadow-lg"
                         >
                             Start Shopping

@@ -29,7 +29,7 @@ const Page = () => {
         return (
             <div className="min-h-screen py-16 px-4">
                 <div className="max-w-4xl mx-auto text-center">
-                    <div className="bg-white rounded-sm p-12 border border-gray-100">
+                    <div className="p-12">
                         <div className="mb-6">
                             <svg
                                 className="w-24 h-24 mx-auto text-gray-300"

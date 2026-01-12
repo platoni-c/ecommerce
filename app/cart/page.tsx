@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useCart } from "@/app/context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "motion/react";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from "lucide-react";
 
 const Page = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
@@ -12,194 +14,138 @@ const Page = () => {
     const KES_EXCHANGE_RATE = 130;
 
     const handleCheckout = () => {
-        if (cart.length === 0) {
-            alert("Your cart is empty!");
-            return;
-        }
-        // Navigate to checkout page (to be implemented)
+        if (cart.length === 0) return;
         alert("Checkout functionality coming soon!");
-    };
-
-    const handleClearCart = () => {
-        clearCart();
-        setShowClearConfirm(false);
     };
 
     if (cart.length === 0) {
         return (
-            <div className="min-h-screen py-16 px-4">
-                <div className="max-w-4xl mx-auto text-center">
-                    <div className="bg-white rounded-sm p-12 border border-gray-100">
-                        <div className="mb-6">
-                            <svg
-                                className="w-24 h-24 mx-auto text-gray-300"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                                />
-                            </svg>
-                        </div>
-                        <h1 className="text-4xl font-bold text-[#433A3F] mb-4">
-                            Your Cart is Empty
-                        </h1>
-                        <p className="text-lg text-gray-600 mb-8">
-                            Looks like you haven&#39;t added anything to your cart yet.
-                        </p>
-                        <Link
-                            href="/shop/hoodies"
-                            className="inline-block btn primary-btn hover:opacity-90 transition shadow-lg"
-                        >
-                            Start Shopping
-                        </Link>
-                    </div>
-                </div>
+            <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center"
+                >
+                    <ShoppingBag className="w-16 h-16 mx-auto text-gray-200 mb-6" />
+                    <h1 className="text-4xl font-bold text-[#433A3F] mb-4 tracking-tighter">YOUR CART IS EMPTY</h1>
+                    <p className="text-gray-500 mb-10 max-w-xs mx-auto">Discover our collection and find something that suits your style.</p>
+                    <Link href="/shop" className="btn primary-btn px-12 py-4">
+                        START SHOPPING
+                    </Link>
+                </motion.div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen py-8 sm:py-12 px-4">
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+                <header className="flex items-end justify-between mb-12 border-b border-gray-100 pb-8">
                     <div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#433A3F] mb-2 tracking-tight">
-                            Shopping Cart
-                        </h1>
-                        <p className="text-base sm:text-lg text-gray-600">
-                            {cartCount} {cartCount === 1 ? "item" : "items"} in your cart
-                        </p>
+                        <span className="text-xs font-bold tracking-[0.3em] text-gray-400 uppercase mb-4 block">Bag</span>
+                        <h1 className="text-5xl font-bold text-[#433A3F] tracking-tighter">SHOPPING CART</h1>
                     </div>
                     <button
                         onClick={() => setShowClearConfirm(true)}
-                        className="text-red-600 hover:text-red-700 font-medium transition text-sm sm:text-base"
+                        className="text-xs font-bold tracking-widest text-red-500 hover:text-red-700 transition-colors uppercase pb-2"
                     >
-                        Clear Cart
+                        Clear All
                     </button>
-                </div>
+                </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                     {/* Cart Items */}
-                    <div className="lg:col-span-2 space-y-4">
-                        {cart.map((item) => (
-                            <div
+                    <div className="lg:col-span-8 space-y-8">
+                        {cart.map((item, index) => (
+                            <motion.div
                                 key={item.id}
-                                className="bg-white rounded-sm p-6 border border-gray-100 transition-colors"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="group relative flex flex-col sm:flex-row gap-8 pb-8 border-b border-gray-100 last:border-0"
                             >
-                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                                    {/* Product Image */}
-                                    <div className="relative w-full sm:w-32 h-48 sm:h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-                                        <Image
-                                            src={item.imageUrl}
-                                            alt={item.name}
-                                            fill
-                                            className="object-contain p-2"
-                                        />
-                                    </div>
+                                <div className="relative aspect-[3/4] w-full sm:w-40 bg-gray-50 overflow-hidden border border-gray-100">
+                                    <Image
+                                        src={item.imageUrl}
+                                        alt={item.name}
+                                        fill
+                                        className="object-contain p-4 mix-blend-multiply"
+                                    />
+                                </div>
 
-                                    {/* Product Details */}
-                                    <div className="flex-1 flex flex-col justify-between">
-                                        <div>
-                                            <h3 className="text-lg sm:text-xl font-semibold text-[#433A3F] mb-1 sm:mb-2">
+                                <div className="flex-1 flex flex-col justify-between py-2">
+                                    <div>
+                                        <div className="flex justify-between items-start mb-4">
+                                            <h3 className="text-xl font-bold text-[#433A3F] tracking-tight group-hover:text-black transition-colors">
                                                 {item.name}
                                             </h3>
-                                            <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
-                                                {item.size && (
-                                                    <span className="bg-gray-100 px-3 py-1 rounded-full">
-                                                        Size: {item.size}
-                                                    </span>
-                                                )}
-                                                {item.color && (
-                                                    <span className="bg-gray-100 px-3 py-1 rounded-full">
-                                                        Color: {item.color}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="text-base sm:text-lg font-semibold text-[#433A3F]">
-                                                KES {(item.price * KES_EXCHANGE_RATE).toLocaleString()}
-                                            </p>
-                                        </div>
-
-                                        {/* Quantity Controls */}
-                                        <div className="flex flex-wrap items-center justify-between mt-4 gap-4">
-                                            <div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
-                                                >
-                                                    −
-                                                </button>
-                                                <span className="w-8 sm:w-12 text-center font-semibold text-base sm:text-lg">
-                                                    {item.quantity}
-                                                </span>
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg border border-gray-300 hover:border-[#433A3F] hover:bg-gray-50 transition flex items-center justify-center font-bold text-lg"
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-
                                             <button
                                                 onClick={() => removeFromCart(item.id)}
-                                                className="text-red-600 hover:text-red-700 font-medium transition flex items-center gap-2 text-sm sm:text-base"
+                                                className="text-gray-300 hover:text-red-500 transition-colors"
                                             >
-                                                <svg
-                                                    className="w-4 h-4 sm:w-5 sm:h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                                    />
-                                                </svg>
-                                                Remove
+                                                <Trash2 className="w-5 h-5" />
                                             </button>
                                         </div>
+
+                                        <div className="flex flex-wrap gap-4 text-xs font-bold tracking-widest text-gray-400 uppercase">
+                                            {item.size && <span>Size: {item.size}</span>}
+                                            {item.color && <span>Color: {item.color}</span>}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between mt-8">
+                                        <div className="flex items-center border border-gray-200">
+                                            <button
+                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition"
+                                            >
+                                                <Minus className="w-3 h-3 text-gray-400" />
+                                            </button>
+                                            <span className="w-10 text-center text-sm font-bold text-[#433A3F]">
+                                                {item.quantity}
+                                            </span>
+                                            <button
+                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition"
+                                            >
+                                                <Plus className="w-3 h-3 text-gray-400" />
+                                            </button>
+                                        </div>
+                                        <p className="text-xl font-bold text-[#433A3F]">
+                                            KES {(item.price * KES_EXCHANGE_RATE).toLocaleString()}
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
 
                     {/* Cart Summary */}
-                    <div className="lg:col-span-1">
-                        <div className="bg-white rounded-sm p-8 border border-gray-100 sticky top-8">
-                            <h2 className="text-2xl font-bold text-[#433A3F] mb-6">
-                                Order Summary
-                            </h2>
+                    <div className="lg:col-span-4">
+                        <div className="bg-[#FAFAFA] border border-gray-100 p-10 sticky top-32">
+                            <h2 className="text-2xl font-bold text-[#433A3F] tracking-tight mb-10">SUMMARY</h2>
 
-                            <div className="space-y-4 mb-6">
-                                <div className="flex justify-between text-gray-700">
-                                    <span>Subtotal ({cartCount} items)</span>
-                                    <span className="font-semibold">
+                            <div className="space-y-6 mb-10 text-sm font-medium">
+                                <div className="flex justify-between text-gray-500">
+                                    <span className="uppercase tracking-widest">Subtotal</span>
+                                    <span className="text-[#433A3F]">
                                         KES {(cartTotal * KES_EXCHANGE_RATE).toLocaleString()}
                                     </span>
                                 </div>
-                                <div className="flex justify-between text-gray-700">
-                                    <span>Shipping</span>
-                                    <span className="font-semibold text-green-600">FREE</span>
+                                <div className="flex justify-between text-gray-500">
+                                    <span className="uppercase tracking-widest">Shipping</span>
+                                    <span className="text-green-600 font-bold uppercase tracking-widest">Complimentary</span>
                                 </div>
-                                <div className="flex justify-between text-gray-700">
-                                    <span>Tax (16%)</span>
-                                    <span className="font-semibold">
+                                <div className="flex justify-between text-gray-500">
+                                    <span className="uppercase tracking-widest">Tax (16%)</span>
+                                    <span className="text-[#433A3F]">
                                         KES {(cartTotal * KES_EXCHANGE_RATE * 0.16).toLocaleString()}
                                     </span>
                                 </div>
-                                <div className="border-t border-gray-200 pt-4">
-                                    <div className="flex justify-between text-xl font-bold text-[#433A3F]">
-                                        <span>Total</span>
-                                        <span>
+                                <div className="border-t border-gray-200 pt-8 mt-4">
+                                    <div className="flex justify-between items-baseline">
+                                        <span className="text-lg font-bold text-[#433A3F] uppercase tracking-tighter">Total</span>
+                                        <span className="text-3xl font-bold text-[#433A3F] tracking-tighter">
                                             KES {(cartTotal * KES_EXCHANGE_RATE * 1.16).toLocaleString()}
                                         </span>
                                     </div>
@@ -208,73 +154,61 @@ const Page = () => {
 
                             <button
                                 onClick={handleCheckout}
-                                className="w-full btn primary-btn hover:opacity-90 transition shadow-lg mb-4"
+                                className="w-full btn primary-btn h-16 flex items-center justify-between px-8"
                             >
-                                Proceed to Checkout
+                                <span>CHECKOUT</span>
+                                <ArrowRight className="w-5 h-5" />
                             </button>
 
                             <Link
                                 href="/shop"
-                                className="block text-center text-[#433A3F] hover:underline font-medium"
+                                className="block text-center mt-6 text-xs font-bold tracking-widest text-gray-400 hover:text-[#433A3F] transition-colors uppercase"
                             >
                                 Continue Shopping
                             </Link>
-
-                            {/* Trust Badges */}
-                            <div className="mt-8 pt-8 border-t border-gray-200">
-                                <div className="space-y-3 text-sm text-gray-600">
-                                    <div className="flex items-center gap-3">
-                                        <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                        <span>Secure checkout</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                        <span>Free shipping on all orders</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                        <span>30-day return policy</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Clear Cart Confirmation Modal */}
-            {showClearConfirm && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-sm p-8 max-w-md w-full">
-                        <h3 className="text-2xl font-bold text-[#433A3F] mb-4">
-                            Clear Cart?
-                        </h3>
-                        <p className="text-gray-600 mb-6">
-                            Are you sure you want to remove all items from your cart? This action cannot be undone.
-                        </p>
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => setShowClearConfirm(false)}
-                                className="flex-1 btn secondary-btn hover:bg-gray-50 transition"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleClearCart}
-                                className="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition font-medium"
-                            >
-                                Clear Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Clear Cart Modal */}
+            <AnimatePresence>
+                {showClearConfirm && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-white p-12 max-w-md w-full border border-gray-100"
+                        >
+                            <h3 className="text-3xl font-bold text-[#433A3F] tracking-tighter mb-4">CLEAR BAG?</h3>
+                            <p className="text-gray-500 mb-10 leading-relaxed">Are you certain you want to remove all items? This action is permanent.</p>
+                            <div className="flex flex-col gap-4">
+                                <button
+                                    onClick={() => {
+                                        clearCart();
+                                        setShowClearConfirm(false);
+                                    }}
+                                    className="btn primary-btn h-14 bg-red-600 border-red-600 hover:bg-black hover:border-black"
+                                >
+                                    CLEAR ALL ITEMS
+                                </button>
+                                <button
+                                    onClick={() => setShowClearConfirm(false)}
+                                    className="btn secondary-btn h-14"
+                                >
+                                    CANCEL
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

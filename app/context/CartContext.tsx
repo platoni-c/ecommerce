@@ -9,6 +9,8 @@ export type CartItem = {
     imageUrl: string;
     size?: string;
     color?: string;
+    uploadedImage?: string;
+    customNotes?: string;
 };
 
 type CartContextType = {

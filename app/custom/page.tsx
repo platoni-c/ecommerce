@@ -1,350 +1,272 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
 
-type CustomizationOptions = {
-    text: string;
-    textColor: string;
-    textPosition: "top" | "center" | "bottom";
-    fontSize: number;
-    fontFamily: string;
-    backgroundColor: string;
-};
-
-const FONT_OPTIONS = [
-    { name: "Arial", value: "Arial, sans-serif" },
-    { name: "Times New Roman", value: "Times New Roman, serif" },
-    { name: "Courier", value: "Courier, monospace" },
-    { name: "Georgia", value: "Georgia, serif" },
-    { name: "Verdana", value: "Verdana, sans-serif" },
-    { name: "Impact", value: "Impact, fantasy" },
+const PRODUCT_COLORS = [
+    { name: "Black", value: "#000000", twClass: "bg-black" },
+    { name: "White", value: "#FFFFFF", twClass: "bg-white border border-gray-200" },
+    { name: "Navy", value: "#1E3A8A", twClass: "bg-blue-900" },
+    { name: "Heather Grey", value: "#9CA3AF", twClass: "bg-gray-400" },
 ];
 
-const COLOR_OPTIONS = [
-    { name: "Black", value: "#000000" },
-    { name: "White", value: "#FFFFFF" },
-    { name: "Red", value: "#EF4444" },
-    { name: "Blue", value: "#3B82F6" },
-    { name: "Green", value: "#10B981" },
-    { name: "Yellow", value: "#F59E0B" },
-    { name: "Purple", value: "#8B5CF6" },
-    { name: "Pink", value: "#EC4899" },
-];
+const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
 const CustomizationContent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { addToCart } = useCart();
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const productId = searchParams.get("id") || "";
     const productName = searchParams.get("name") || "Custom Product";
-    const productPrice = parseFloat(searchParams.get("price") || "0");
+    const basePrice = parseFloat(searchParams.get("price") || "0");
     const productImage = searchParams.get("image") || "/clothing-outline.png";
 
-    const [customization, setCustomization] = useState<CustomizationOptions>({
-        text: "",
-        textColor: "#000000",
-        textPosition: "center",
-        fontSize: 24,
-        fontFamily: "Arial, sans-serif",
-        backgroundColor: "#FFFFFF",
-    });
+    const [productColor, setProductColor] = useState("Black");
+    const [selectedSize, setSelectedSize] = useState("");
+    const [customImage, setCustomImage] = useState<string | null>(null);
+    const [customNotes, setCustomNotes] = useState("");
 
-    const [showPreview, setShowPreview] = useState(true);
-
-    const updateCustomization = <K extends keyof CustomizationOptions>(key: K, value: CustomizationOptions[K]) => {
-        setCustomization((prev) => ({ ...prev, [key]: value }));
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCustomImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleAddToCart = () => {
-        if (!customization.text.trim()) {
-            alert("Please add some text to customize your product!");
+        if (!customImage) {
+            alert("Please upload an image for your design!");
+            return;
+        }
+        if (!selectedSize) {
+            alert("Please select a size!");
             return;
         }
 
         addToCart({
             id: `${productId}-custom-${Date.now()}`,
-            name: `${productName} (Customized)`,
-            price: productPrice + 10, // Add customization fee
+            name: `${productName} (Custom Design - ${productColor})`,
+            price: basePrice + 10,
             imageUrl: productImage,
             quantity: 1,
+            size: selectedSize,
+            color: productColor,
+            uploadedImage: customImage,
+            customNotes: customNotes,
         });
 
-        alert("Customized product added to cart!");
         router.push("/cart");
     };
 
-    const getTextPositionStyle = () => {
-        switch (customization.textPosition) {
-            case "top":
-                return "items-start pt-8";
-            case "bottom":
-                return "items-end pb-8";
-            default:
-                return "items-center";
-        }
-    };
+    const KES_EXCHANGE_RATE = 130;
+    const totalPrice = (basePrice + 10) * KES_EXCHANGE_RATE;
 
     return (
-        <div className="min-h-screen py-6 sm:py-12 px-4">
-            <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-8 sm:mb-12">
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#433A3F] mb-3 sm:mb-4 tracking-tight">
-                        Customize Your Product
-                    </h1>
-                    <p className="text-base sm:text-lg text-gray-600">
-                        Make it uniquely yours with custom text and design
-                    </p>
-                </div>
+        <div className="min-h-screen bg-white text-[#433A3F]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
-                    {/* Preview Section */}
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-sm p-4 sm:p-8 border border-gray-100">
-                            <div className="flex items-center justify-between mb-4 sm:mb-6">
-                                <h2 className="text-xl sm:text-2xl font-semibold text-[#433A3F]">
-                                    Live Preview
-                                </h2>
-                                <button
-                                    onClick={() => setShowPreview(!showPreview)}
-                                    className="text-sm text-gray-600 hover:text-[#433A3F] transition"
-                                >
-                                    {showPreview ? "Hide" : "Show"} Preview
-                                </button>
-                            </div>
+                {/* Back Button */}
+                <button
+                    onClick={() => router.back()}
+                    className="mb-6 text-sm text-gray-500 hover:text-[#433A3F] flex items-center gap-2 transition-colors"
+                >
+                    ← Back to Shop
+                </button>
 
-                            {showPreview && (
-                                <div className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden">
-                                    <Image
-                                        src={productImage}
-                                        alt={productName}
-                                        fill
-                                        className="object-contain p-8"
-                                    />
-                                    {/* Custom Text Overlay */}
-                                    <div
-                                        className={`absolute inset-0 flex justify-center ${getTextPositionStyle()} pointer-events-none`}
-                                    >
-                                        {customization.text && (
-                                            <div
-                                                className="px-6 py-3 rounded-sm transition-all duration-300"
-                                                style={{
-                                                    backgroundColor: customization.backgroundColor,
-                                                    opacity: 0.95,
-                                                }}
-                                            >
-                                                <p
-                                                    style={{
-                                                        color: customization.textColor,
-                                                        fontSize: `${customization.fontSize}px`,
-                                                        fontFamily: customization.fontFamily,
-                                                        fontWeight: "bold",
-                                                        textShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                                    }}
-                                                >
-                                                    {customization.text}
-                                                </p>
-                                            </div>
-                                        )}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
+                    {/* Left Column: Preview */}
+                    <div className="relative">
+                        <div className="sticky top-8">
+                            <h2 className="text-sm uppercase tracking-widest text-gray-500 mb-4 font-medium lg:hidden">
+                                Preview
+                            </h2>
+                            <div className="aspect-square bg-[#FAFAFA] rounded-sm relative overflow-hidden flex items-center justify-center border border-gray-100">
+                                <Image
+                                    src={productImage}
+                                    alt={productName}
+                                    width={600}
+                                    height={600}
+                                    className="object-contain w-[80%] h-[80%] mix-blend-multiply opacity-90"
+                                    priority
+                                />
+                                {/* Custom Image Overlay */}
+                                {customImage && (
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-16">
+                                        <div className="relative w-1/2 aspect-square">
+                                            <Image
+                                                src={customImage}
+                                                alt="Custom Print"
+                                                fill
+                                                className="object-contain drop-shadow-md"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
-                            {/* Product Info */}
-                            <div className="mt-6 pt-6 border-t border-gray-200">
-                                <h3 className="text-xl font-semibold text-[#433A3F] mb-2">
-                                    {productName}
-                                </h3>
-                                <div className="flex items-center justify-between">
-                                    <p className="text-gray-600">
-                                        Base Price: KES {(productPrice * 130).toLocaleString()}
-                                    </p>
-                                    <p className="text-sm text-green-600 font-medium">
-                                        +KES 1,300 customization
-                                    </p>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-gray-200">
-                                    <p className="text-2xl font-bold text-[#433A3F]">
-                                        Total: KES {((productPrice + 10) * 130).toLocaleString()}
-                                    </p>
-                                </div>
+                                {!customImage && (
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <p className="text-gray-300 text-sm font-medium border-2 border-dashed border-gray-300 px-4 py-2 rounded-sm">
+                                            Your Design Here
+                                        </p>
+                                    </div>
+                                )}
                             </div>
+                            <p className="text-center text-xs text-gray-400 mt-4">
+                                *Preview is an approximation. Actual print size and placement may vary.
+                            </p>
                         </div>
                     </div>
 
-                    {/* Customization Options */}
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-sm p-6 sm:p-8 border border-gray-100">
-                            <h2 className="text-xl sm:text-2xl font-semibold text-[#433A3F] mb-6">
-                                Customization Options
-                            </h2>
+                    {/* Right Column: Options */}
+                    <div className="flex flex-col h-full">
 
-                            {/* Text Input */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Custom Text
-                                </label>
-                                <input
-                                    type="text"
-                                    value={customization.text}
-                                    onChange={(e) => updateCustomization("text", e.target.value)}
-                                    placeholder="Enter your custom text..."
-                                    maxLength={50}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#433A3F] focus:border-transparent transition"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">
-                                    {customization.text.length}/50 characters
-                                </p>
+                        {/* 1. Name */}
+                        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">
+                            {productName}
+                        </h1>
+
+                        {/* 2. Product Color */}
+                        <div className="mb-6">
+                            <p className="text-sm text-gray-500 mb-3">
+                                Selected Color: <span className="text-[#433A3F] font-medium">{productColor}</span>
+                            </p>
+                            <div className="flex gap-3">
+                                {PRODUCT_COLORS.map((color) => (
+                                    <button
+                                        key={color.name}
+                                        onClick={() => setProductColor(color.name)}
+                                        className={`w-10 h-10 rounded-full ${color.twClass} transition-all duration-200 ${productColor === color.name
+                                                ? "ring-2 ring-offset-2 ring-[#433A3F] scale-110"
+                                                : "hover:scale-105 opacity-80 hover:opacity-100"
+                                            }`}
+                                        title={color.name}
+                                    />
+                                ))}
                             </div>
+                        </div>
 
-                            {/* Font Family */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Font Style
+                        {/* 3. Price */}
+                        <div className="mb-8 pb-8 border-b border-gray-100">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold">
+                                    KES {totalPrice.toLocaleString()}
+                                </span>
+                                <span className="text-sm text-gray-400 line-through">
+                                    KES {(basePrice * KES_EXCHANGE_RATE * 1.5).toLocaleString()}
+                                </span>
+                            </div>
+                            <p className="text-sm text-green-600 mt-1">
+                                Includes customization fee
+                            </p>
+                        </div>
+
+                        {/* 4. Customization Options */}
+                        <div className="space-y-8 flex-grow">
+
+                            {/* Image Upload */}
+                            <div>
+                                <label className="block text-sm font-medium uppercase tracking-wide text-gray-700 mb-3">
+                                    Upload Your Design
                                 </label>
-                                <select
-                                    value={customization.fontFamily}
-                                    onChange={(e) =>
-                                        updateCustomization("fontFamily", e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#433A3F] focus:border-transparent transition"
+                                <div
+                                    className="border-2 border-dashed border-gray-200 rounded-sm p-6 text-center hover:border-gray-400 transition-colors cursor-pointer bg-gray-50"
+                                    onClick={() => fileInputRef.current?.click()}
                                 >
-                                    {FONT_OPTIONS.map((font) => (
-                                        <option key={font.value} value={font.value}>
-                                            {font.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {/* Font Size */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Font Size: {customization.fontSize}px
-                                </label>
-                                <input
-                                    type="range"
-                                    min="12"
-                                    max="48"
-                                    value={customization.fontSize}
-                                    onChange={(e) =>
-                                        updateCustomization("fontSize", parseInt(e.target.value))
-                                    }
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#433A3F]"
-                                />
-                            </div>
-
-                            {/* Text Color */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
-                                    Text Color
-                                </label>
-                                <div className="grid grid-cols-4 gap-3">
-                                    {COLOR_OPTIONS.map((color) => (
-                                        <button
-                                            key={color.value}
-                                            onClick={() => updateCustomization("textColor", color.value)}
-                                            className={`h-12 rounded-lg border-2 transition-all hover:scale-105 ${customization.textColor === color.value
-                                                ? "border-[#433A3F] ring-2 ring-[#433A3F] ring-offset-2"
-                                                : "border-gray-300"
-                                                }`}
-                                            style={{ backgroundColor: color.value }}
-                                            title={color.name}
-                                        />
-                                    ))}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        ref={fileInputRef}
+                                        onChange={handleImageUpload}
+                                    />
+                                    <div className="space-y-2">
+                                        <div className="mx-auto h-12 w-12 text-gray-400">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div className="text-sm text-gray-600">
+                                            <span className="font-medium text-[#433A3F] underline">Click to upload</span> or drag and drop
+                                        </div>
+                                        <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+                                    </div>
                                 </div>
+                                {customImage && (
+                                    <div className="mt-3 flex items-center justify-between text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-sm">
+                                        <span>Image selected</span>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); setCustomImage(null); }}
+                                            className="text-red-500 hover:text-red-700 font-medium"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
-                            {/* Background Color */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
-                                    Background Color
+                            {/* Size Selection */}
+                            <div>
+                                <label className="block text-sm font-medium uppercase tracking-wide text-gray-700 mb-3">
+                                    Select Size
                                 </label>
-                                <div className="grid grid-cols-4 gap-3">
-                                    {COLOR_OPTIONS.map((color) => (
+                                <div className="flex flex-wrap gap-2">
+                                    {SIZES.map((size) => (
                                         <button
-                                            key={color.value}
-                                            onClick={() =>
-                                                updateCustomization("backgroundColor", color.value)
-                                            }
-                                            className={`h-12 rounded-lg border-2 transition-all hover:scale-105 ${customization.backgroundColor === color.value
-                                                ? "border-[#433A3F] ring-2 ring-[#433A3F] ring-offset-2"
-                                                : "border-gray-300"
-                                                }`}
-                                            style={{ backgroundColor: color.value }}
-                                            title={color.name}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Text Position */}
-                            <div className="mb-8">
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
-                                    Text Position
-                                </label>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {(["top", "center", "bottom"] as const).map((position) => (
-                                        <button
-                                            key={position}
-                                            onClick={() => updateCustomization("textPosition", position)}
-                                            className={`py-3 px-4 rounded-lg border-2 transition-all font-medium capitalize ${customization.textPosition === position
-                                                ? "border-[#433A3F] bg-[#433A3F] text-white"
-                                                : "border-gray-300 hover:border-[#433A3F]"
+                                            key={size}
+                                            onClick={() => setSelectedSize(size)}
+                                            className={`w-12 h-10 border rounded-sm transition-colors text-sm font-medium ${selectedSize === size
+                                                    ? "border-[#433A3F] bg-[#433A3F] text-white"
+                                                    : "border-gray-200 hover:border-gray-400 text-gray-600"
                                                 }`}
                                         >
-                                            {position}
+                                            {size}
                                         </button>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={() => router.back()}
-                                    className="flex-1 btn secondary-btn hover:bg-gray-50 transition"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleAddToCart}
-                                    className="flex-1 btn primary-btn hover:opacity-90 transition shadow-lg"
-                                >
-                                    Add to Cart
-                                </button>
+                            {/* Print Instructions */}
+                            <div>
+                                <label className="block text-sm font-medium uppercase tracking-wide text-gray-700 mb-3">
+                                    Print Instructions / Notes
+                                </label>
+                                <textarea
+                                    value={customNotes}
+                                    onChange={(e) => setCustomNotes(e.target.value)}
+                                    placeholder="Describe where and how you want the print (e.g., 'Center chest', 'Small logo on left pocket', 'Back print')..."
+                                    rows={3}
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:border-[#433A3F] focus:ring-0 transition-colors resize-none placeholder:text-gray-400"
+                                />
                             </div>
+
                         </div>
 
-                        {/* Tips Section */}
-                        <div className=" rounded-sm p-6 border border-blue-100">
-                            <h3 className="text-lg font-semibold text-[#433A3F] mb-3 flex items-center gap-2">
-                                <span className="text-2xl">💡</span>
-                                Customization Tips
-                            </h3>
-                            <ul className="space-y-2 text-sm text-gray-700">
-                                <li className="flex items-start gap-2">
-                                    <span className="text-blue-500 mt-1">•</span>
-                                    <span>Keep text short and impactful for best results</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-blue-500 mt-1">•</span>
-                                    <span>Choose contrasting colors for better visibility</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-blue-500 mt-1">•</span>
-                                    <span>Preview your design before adding to cart</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-blue-500 mt-1">•</span>
-                                    <span>Customization adds KES 1,300 to the base price</span>
-                                </li>
-                            </ul>
+                        {/* 5. Actions */}
+                        <div className="mt-10 pt-6 border-t border-gray-100">
+                            <button
+                                onClick={handleAddToCart}
+                                className="w-full py-4 bg-[#433A3F] text-white font-medium uppercase tracking-widest hover:bg-black transition-colors rounded-sm shadow-sm"
+                            >
+                                Add to Cart — KES {totalPrice.toLocaleString()}
+                            </button>
                         </div>
+
+                        {/* 6. Notice */}
+                        <div className="mt-6 text-[10px] text-gray-400 leading-normal text-center sm:text-left">
+                            <p>
+                                Price varies depending on the production technique, print placement, product color and size, taxes, and shipping.
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -354,11 +276,8 @@ const CustomizationContent = () => {
 
 const Page = () => (
     <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#433A3F] mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading customization studio...</p>
-            </div>
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="animate-spin w-8 h-8 border-2 border-[#433A3F] border-t-transparent rounded-full"></div>
         </div>
     }>
         <CustomizationContent />

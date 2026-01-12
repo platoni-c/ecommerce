@@ -1,21 +1,49 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background-color: #433A3F;
+    color: #fff;
+}
+
 @custom-variant dark (&:is(.dark *));
 
-body {
-    background-color: #fffcf2;
-}
+
 .btn {
-    padding: 12px 16px;
+    padding: 14px 24px;
+    border-radius: 0 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .primary-btn {
     color: #fff;
     background-color: #433A3F;
+    border: 1px solid #433A3F;
 }
+
+.primary-btn:hover {
+    background-color: #000;
+    border-color: #000;
+}
+
 .secondary-btn {
     color: #433A3F;
-    background-color: #fff;
+    background-color: transparent;
     border: 1px solid #433A3F;
+}
+
+.secondary-btn:hover {
+    background-color: #433A3F;
+    color: #fff;
 }

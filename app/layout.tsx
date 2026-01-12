@@ -28,7 +28,6 @@ export default function RootLayout({
       <body className={`${raleway.variable} antialiased`}>
         <CartProvider>
           {/* Full-width sticky notice at the very top */}
-          <Notice />
 
           {/* Constrained site content */}
           <div className="max-w-7xl mx-auto sm:px-10 px-6">
